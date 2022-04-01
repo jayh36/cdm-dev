@@ -1,0 +1,68 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/common :: head('Board')"></head>
+
+<body class="sb-nav-fixed">
+  <div th:replace="fragments/common :: topNav"></div>
+  <div id="layoutSidenav">
+      <div th:replace="fragments/common :: sideNav"></div>        
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">Board</h1>
+            <div>Total count : <span th:text="${boards.totalElements}"></span></div>
+            <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="searchText" class="sr-only">Search</label>
+                <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}" placeholder="Title or Content">
+              </div>
+              <button type="submit" class="btn btn-secondary mb-2">Search</button>
+            </form>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">writer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="board : ${boards}">
+                  <td th:text="${board.id}">Mark</td>
+                  <td><a th:href="@{/board/form(id=${board.id})}" th:text="${board.title}">Otto</a></td>
+                  <td th:text="${board.user.username}">@mdo</td>
+                </tr>
+              </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disabled'">
+                  <a class="page-link" href="#"
+                    th:href="@{/board/list(page=${boards.pageable.pageNumber - 1}, searchText=${param.searchText})}"
+                    tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'disabled'"
+                  th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                  <a class="page-link" href="#" th:href="@{/board/list(page=${i - 1}, searchText=${param.searchText})}"
+                    th:text="${i}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${boards.totalPages == boards.pageable.pageNumber + 1} ? 'disabled'">
+                  <a class="page-link" href="#"
+                    th:href="@{/board/list(page=${boards.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
+                </li>
+              </ul>
+            </nav>
+            <div class="d-flex justify-content-end">
+              <a type="button" class="btn btn-primary" th:href="@{/board/form}">write</a>
+            </div>
+
+          </div>
+          <!-- /.container -->
+        </main>
+        <footer th:replace="fragments/common :: footer"></footer>
+      </div>        
+  </div>    
+</body>
+
+</html>

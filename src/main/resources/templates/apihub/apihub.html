@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/common :: head('ApiHub')"></head>
+
+<body class="sb-nav-fixed">
+  <div th:replace="fragments/common :: topNav"></div>
+  <div id="layoutSidenav">
+      <div th:replace="fragments/common :: sideNav"></div>        
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h3 class="mt-4">서비스단말기정보조회(ISSWG00078)</h3>
+            <hr class="my-4">
+              <div class="bd-example">
+                <form method="GET" th:action="@{/apihub/serviceDeviceInfo}">
+                  <h4 class="mb-3">INPUT</h4>      
+                  <div class="mb-3">
+                    <label class="form-label">SVC_MGMT_NUM</label>
+                    <input type="text" class="form-control" id="svcMgmtNum" name="svcMgmtNum" value="7223563759">
+                    <span class="font-13 text-muted">e.g "7223563759"</span>
+                  </div>
+                  <div class="float-right">
+                    <button type="submit" class="btn btn-secondary">조회</button>
+                  </div>
+                </form>
+                <hr class="my-4">
+                <h4 class="mb-3">OUTPUT</h4>
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="serviceDeviceInfo : ${serviceDeviceInfo}">
+                    <td th:text="${serviceDeviceInfo.key}">Otto</td>
+                    <td th:text="${serviceDeviceInfo.value}">@mdo</td>
+                  </tr>
+                  </tbody>
+                </table>
+                <hr class="my-4">
+              </div>
+            </div>
+            <!-- /.container -->
+          </main>
+          <footer th:replace="fragments/common :: footer"></footer>          
+        </div>        
+    </div>    
+  </body>

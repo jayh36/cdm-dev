@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <head th:replace="fragments/common :: head('Board')"></head>
+
+  <body class="sb-nav-fixed">
+    <div th:replace="fragments/common :: topNav"></div>
+    <div id="layoutSidenav">
+        <div th:replace="fragments/common :: sideNav"></div>        
+        <div id="layoutSidenav_content">
+          <main>
+            <div class="container-fluid px-4">
+              <h1 class="mt-4">Board</h1>  
+                <form action="#" th:action="@{/board/form}" th:object="${board}" method="post">
+                  <input type="hidden" th:field="*{id}">
+                  <div class="form-group">            
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? is-invalid" id="title" th:field="*{title}">
+                    <div id="validationServer03Feedback" class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                      Please provide a valid title.
+                    </div>
+                  </div>
+                  <div class="form-group">            
+                    <label for="content" class="form-label">content</label>
+                    <textarea type="text" class="form-control" id="content" rows="3" th:field="*{content}"></textarea>
+                  </div>
+                  <div class="mt-4 d-flex justify-content-end">
+                    <a type="button" class="btn btn-primary" th:href="@{/board/list}">cancle</a>
+                    <button type="button" class="mx-sm-3 btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="|deleteBoard(*{id})|">delete</button>
+                    <button type="submit" class="btn btn-primary">confirm</button>
+                  </div>
+                </form>         
+            </div>
+            <!-- /.container -->
+          </main>
+          <footer th:replace="fragments/common :: footer"></footer>
+          <script>
+            function deleteBoard(id) {
+                  //DELETE /api/boards/{id}
+                  $.ajax({
+                      url: '/api/boards/' + id,
+                      type: 'DELETE',
+                      success: function(result) {
+                          console.log('result', result);
+                          alert('Board deleted.');     
+                          window.location.href = '/board/list';
+                      }
+                  });
+              }
+          </script>
+        </div>        
+    </div>    
+  </body>
+  
+</html>
